@@ -41,7 +41,7 @@ if (window.ethereum == undefined) {
 
 const provider = new ethers.providers.Web3Provider(window.ethereum,"any");
 const signer = provider.getSigner();
-const souls = new ethers.Contract(tokenAddress, tokenAbi(), signer);
+const token = new ethers.Contract(tokenAddress, tokenAbi(), signer);
 const market = new ethers.Contract(marketAddress, marketAbi(), signer);
 
 const connect = async()=>{

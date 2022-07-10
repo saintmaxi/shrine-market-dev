@@ -41,7 +41,7 @@ if (window.ethereum == undefined) {
 
 const provider = new ethers.providers.Web3Provider(window.ethereum,"any");
 const signer = provider.getSigner();
-const souls = new ethers.Contract(tokenAddress, tokenAbi(), signer);
+const token = new ethers.Contract(tokenAddress, tokenAbi(), signer);
 const market = new ethers.Contract(marketAddress, marketAbi(), signer);
 
 const connect = async()=>{
@@ -121,7 +121,7 @@ const addListing = async() => {
     }
     catch (error) {
         if ((error.message).includes("You are not Authorized for this ERC20 Contract!")) {
-            await displayErrorMessage(`You are not authorized to add listings for $SOULS!`);
+            await displayErrorMessage(`You are not authorized to add listings for $SHRINE!`);
         }
         else if ((error.message).includes("User denied transaction signature")) {
             console.log("Transaction rejected.");
@@ -238,7 +238,7 @@ const modifyListing = async() => {
     }
     catch (error) {
         if ((error.message).includes("You are not Authorized for this ERC20 Contract!")) {
-            await displayErrorMessage(`You are not authorized to add listings for $SOULS!`);
+            await displayErrorMessage(`You are not authorized to add listings for $SHRINE!`);
         }
         else if ((error.message).includes("User denied transaction signature")) {
             console.log("Transaction rejected.");
