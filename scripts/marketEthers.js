@@ -14,7 +14,7 @@
 
 // const etherscanBase = `https://etherscan.io/tx/`;
 // const correctChain = 1;
-// const tokenImgURL = "https://github.com/saintmaxi/shrine-market-dev/blob/master/images/token.png?raw=true";
+// const tokenImgURL = "https://github.com/saintmaxi/shrine-market-dev/blob/main/images/token.png?raw=true";
 
 /*********************************************************************************/
 /***********************************DEV CONFIG************************************/
@@ -32,7 +32,7 @@ const marketAbi = () => {
 
 const etherscanBase = `https://rinkeby.etherscan.io/tx/`;
 const correctChain = 4;
-const tokenImgURL = "https://github.com/saintmaxi/shrine-market-dev/blob/master/images/token.png?raw=true";
+const tokenImgURL = "https://github.com/saintmaxi/shrine-market-dev/blob/main/images/token.png?raw=true";
 
 /*********************************END CONFIG************************************/
 
