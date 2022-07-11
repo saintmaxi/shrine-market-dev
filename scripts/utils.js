@@ -71,13 +71,15 @@ function showModify() {
 }
 
 function toggleMenu() {
-    const el = document.getElementById("mobile-nav-menu")
-    el.classList.toggle('expanded')
-    el.classList.toggle('collapsed')
+    const el = document.getElementById("mobile-nav-menu");
+    el.classList.toggle('expanded');
+    el.classList.toggle('collapsed');
+    const el2 = document.getElementById("mobile-wallet-connect-div");
+    el2.classList.toggle('border-bottom-black');
 }
 
 function clearPendingTxs() {
-    localStorage.removeItem("AscensionMarketPendingTxs");
+    localStorage.removeItem("ShrineMarketPendingTxs");
     pendingTransactions.clear();
     location.reload();
 };

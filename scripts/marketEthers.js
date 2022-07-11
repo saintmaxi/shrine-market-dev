@@ -63,7 +63,7 @@ const loadingDiv = `<div id="ex1" class="partner-collection example">
                         <div class="cover">
                             <button class="button loading" onclick="connect()">LOADING<span class="one">.</span><span class="two">.</span><span class="three">.</span></button>
                         </div>
-                        <img class="collection-img" src="./images/silhouette.jpeg">
+                        <img class="collection-img" src="./images/silhouette.png">
                         <div class="collection-info">
                             <h3>???</h3>
                             <h4>???/??? Purchased
@@ -429,7 +429,7 @@ const waitForTransaction = async(tx_) => {
 };
 
 // Resuming UI display, refreshing market for pending txs across pages
-var pendingTransactions = localStorage.getItem("AscensionMarketPendingTxs");
+var pendingTransactions = localStorage.getItem("ShrineMarketPendingTxs");
 
 if (!pendingTransactions) {
     pendingTransactions = new Set();
@@ -442,11 +442,11 @@ else {
     for (let i =0; i < pendingTxArray.length; i++) {
         waitForTransaction(pendingTxArray[i]);
     }
-    localStorage.removeItem("AscensionMarketPendingTxs");
+    localStorage.removeItem("ShrineMarketPendingTxs");
 }
 
 function cachePendingTransactions() {
-    localStorage.setItem("AscensionMarketPendingTxs", JSON.stringify(Array.from(pendingTransactions)));
+    localStorage.setItem("ShrineMarketPendingTxs", JSON.stringify(Array.from(pendingTransactions)));
 }
 
 function startLoading(tx) {

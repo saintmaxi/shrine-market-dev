@@ -264,7 +264,7 @@
         border-right: none;
         font-size: 5vh;
         line-height: 5vh;
-        background-color: #100C08;
+        background-color: rgba(255, 255, 255, 0.955);
         margin: 0;
         padding: 1%;
         backdrop-filter: blur(10px);
@@ -328,8 +328,8 @@
     #mobile-nav-menu {
         margin-top: -100%;
         transition: all 0.4s;
-        background-color: #100C08;
-
+        background-color: white;
+        border-bottom: solid 1px black;
     }
     
     #mobile-nav-menu.expanded {
@@ -407,7 +407,7 @@
     #navbar {
         touch-action: manipulation;
         width: 10%;
-        background-color: black !important;
+        background-color: white;
         background-image: url("../images/burger.png");
         background-size: 100% 100%;
     }
@@ -417,7 +417,7 @@
         flex-direction: row;
         align-items: center;
         justify-content: space-evenly;
-        background-color: #100C08;
+        background-color: white;
         text-align: center;
         padding-top: 5px;
         padding-bottom: 10px;
@@ -425,12 +425,16 @@
         -webkit-backdrop-filter: blur(10px);
     }
 
+    .border-bottom-black {
+        border-bottom: solid 1px black;
+    }
+
     #mobile-wallet-connect-div .button {
         min-height: 6vh;
     }
 
     #mobile-account, #discord-mobile {
-        background-color: #F72119 !important;
+        background-color: #FF3635 !important;
         color: white !important;
         width: 40%;
     }

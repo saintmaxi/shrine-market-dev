@@ -9,8 +9,7 @@ select {
 	border-style: solid;
 	background-color: white;
 	color: black !important;
-	border-width: 1px solid black;
-	border: none;
+	border: 1px solid black;
 	min-width: 35%;
 }
 
@@ -54,6 +53,8 @@ html, body {
 	position:fixed;
     bottom:0px;
     z-index: -1;
+	/* filter: blur(1px);
+    -webkit-filter: blur(1px); */
 }
 
 h1, h2 {
@@ -127,7 +128,7 @@ p {
 }
 
   .button.loading, .button.connect {
-	background-color: #BF0C00 !important;
+	background-color: #FF3635 !important;
 	color: white !important;
   }
 
@@ -297,7 +298,7 @@ h5 {
 
 
 #loading-popup {
-    border: solid 1px white;
+    border: solid 1px black;
     background-color: white;
     padding:5vw;
     z-index: 99999;
@@ -310,7 +311,7 @@ h5 {
 }
 
 #error-popup, #status-popup, #discord-popup {
-	background-color: #100C08;
+	background-color: white;
     z-index: 99999;
     position:fixed;
     top:50%;
@@ -318,7 +319,7 @@ h5 {
     transform: translate(-50%, -50%);
     width: 53vw;
     height: 35vh;
-    border: solid 1px white;
+    border: solid 1px black;
     text-align: center;
     box-shadow: 0 0 5000px 5000px rgba(0,0,0,0.88);
 }
@@ -332,7 +333,7 @@ h5 {
     font-size: 2.5vw !important;
     line-height: 2.7vw !important;
     position: absolute;
-	color: white;
+	color: black;
     top: 50%;
     left: 50%;
 	padding: 1vw;
@@ -357,7 +358,7 @@ h5 {
 	font-size: 2vw;
 	line-height: 2vw;
 	position: absolute;
-	color: white;
+	color: black;
 	top: 50%;
 	left: 50%;
 	width: 90%;

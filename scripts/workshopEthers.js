@@ -103,7 +103,6 @@ const addListing = async() => {
         }
         else {
             let title = $("#create-input #listing-title").val();
-            let category = $("#create-input #type-select").val();
             let image = $("#create-input #listing-image").val();
             let site = ($("#create-input #listing-site").val()).includes("https://") ? $("#create-input #listing-site").val() : `https://${$("#create-input #listing-site").val()}`;
             let description = $("#create-input #listing-description").val();
@@ -113,7 +112,7 @@ const addListing = async() => {
                 await displayErrorMessage("Missing fields!")
             }
             else {
-                await market.addWLVendingItem(tokenAddress, [title, image, site, category + " " + description, amount, 0, start, deadline, price]).then( async(tx_) => {
+                await market.addWLVendingItem(tokenAddress, [title, image, site, description, amount, 0, start, deadline, price]).then( async(tx_) => {
                     await waitForTransaction(tx_);
                 });
             }
@@ -159,8 +158,7 @@ const selectListing = async(id) => {
     let title = currentlySelectedWLinfo.title;
     let image = currentlySelectedWLinfo.imageUri;
     let site = (currentlySelectedWLinfo.projectUri).includes("https://") ? currentlySelectedWLinfo.projectUri : `https://${currentlySelectedWLinfo.projectUri}`;
-    let description = currentlySelectedWLinfo.description ? (currentlySelectedWLinfo.description).substr((currentlySelectedWLinfo.description).indexOf(" ") + 1) : "";
-    $("#modify-input #type-select").val(currentlySelectedWLinfo.description.split(' ')[0])
+    let description = currentlySelectedWLinfo.description;
     let amount = currentlySelectedWLinfo.amountAvailable;
     let purchased = currentlySelectedWLinfo.amountPurchased;
     let start = $("#modify-input #listing-start").val() ? (new Date($(`#modify-input #listing-start`).val()).valueOf())/1000 : currentlySelectedWLinfo.startTime;
@@ -211,11 +209,10 @@ const modifyListing = async() => {
     try {
         let currentlySelectedWLinfo = await market.contractToWLVendingItems(tokenAddress, currentlySelected);
         let title = $("#modify-input #listing-title").val() ? $("#modify-input #listing-title").val() : currentlySelectedWLinfo.title;
-        let category = $("#modify-input #type-select").val();
         let image = $("#modify-input #listing-image").val()? $("#modify-input #listing-image").val() : currentlySelectedWLinfo.imageUri;
         let site = $("#modify-input #listing-site").val() ? $("#modify-input #listing-site").val() : currentlySelectedWLinfo.projectUri;
         let siteFormatted = site.includes("https://") ? site : `https://${site}`;
-        let description = $("#modify-input #listing-description").val() ? $("#modify-input #listing-description").val() : currentlySelectedWLinfo.description ? (currentlySelectedWLinfo.description).substr((currentlySelectedWLinfo.description).indexOf(" ") + 1) : "";
+        let description = $("#modify-input #listing-description").val() ? $("#modify-input #listing-description").val() : currentlySelectedWLinfo.description;
         let amount = $("#modify-input #listing-amount").val() ? Number($("#modify-input #listing-amount").val()) : currentlySelectedWLinfo.amountAvailable;
         let purchased = currentlySelectedWLinfo.amountPurchased;
         let start = $("#modify-input #listing-start").val() ? (new Date($(`#modify-input #listing-start`).val()).valueOf())/1000 : currentlySelectedWLinfo.startTime;
@@ -231,7 +228,7 @@ const modifyListing = async() => {
             await displayErrorMessage("Error: Start time must be before deadline!");
         }
         else {
-            await market.modifyWLVendingItem(tokenAddress, currentlySelected, [title, image, siteFormatted, category + " " + description, amount, purchased, start, deadline, price]).then( async(tx_) => {
+            await market.modifyWLVendingItem(tokenAddress, currentlySelected, [title, image, siteFormatted, description, amount, purchased, start, deadline, price]).then( async(tx_) => {
                 await waitForTransaction(tx_);
             });
         }
@@ -269,7 +266,7 @@ const waitForTransaction = async(tx_) => {
 };
 
 // Resuming UI display, refreshing market for pending txs across pages
-var pendingTransactions = localStorage.getItem("AscensionMarketPendingTxs");
+var pendingTransactions = localStorage.getItem("ShrineMarketPendingTxs");
 
 if (!pendingTransactions) {
     pendingTransactions = new Set();
@@ -282,11 +279,11 @@ else {
     for (let i =0; i < pendingTxArray.length; i++) {
         waitForTransaction(pendingTxArray[i]);
     }
-    localStorage.removeItem("AscensionMarketPendingTxs");
+    localStorage.removeItem("ShrineMarketPendingTxs");
 }
 
 function cachePendingTransactions() {
-    localStorage.setItem("AscensionMarketPendingTxs", JSON.stringify(Array.from(pendingTransactions)));
+    localStorage.setItem("ShrineMarketPendingTxs", JSON.stringify(Array.from(pendingTransactions)));
 }
 
 function startLoading(tx) {

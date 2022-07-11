@@ -199,7 +199,7 @@ const waitForTransaction = async(tx_) => {
 };
 
 // Resuming UI display, refreshing market for pending txs across pages
-var pendingTransactions = localStorage.getItem("AscensionMarketPendingTxs");
+var pendingTransactions = localStorage.getItem("ShrineMarketPendingTxs");
 
 if (!pendingTransactions) {
     pendingTransactions = new Set();
@@ -212,11 +212,11 @@ else {
     for (let i =0; i < pendingTxArray.length; i++) {
         waitForTransaction(pendingTxArray[i]);
     }
-    localStorage.removeItem("AscensionMarketPendingTxs");
+    localStorage.removeItem("ShrineMarketPendingTxs");
 }
 
 function cachePendingTransactions() {
-    localStorage.setItem("AscensionMarketPendingTxs", JSON.stringify(Array.from(pendingTransactions)));
+    localStorage.setItem("ShrineMarketPendingTxs", JSON.stringify(Array.from(pendingTransactions)));
 }
 
 function startLoading(tx) {
