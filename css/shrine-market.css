@@ -4,6 +4,19 @@
 	src: URL('./MSBee-Light.woff2') format('truetype');
 }  
 
+@font-face {  
+	font-family: 'KFA';
+	src: URL('./KranaFat-A.woff2') format('truetype');
+}  
+
+.connect-status {
+	height: 25px;
+	width: 25px;
+	background-color: red;
+	border-radius: 50%;
+	display: inline-block;
+}
+
 select {
 	border-radius: 4px;
 	font-size: 2vw !important;
@@ -105,57 +118,60 @@ p {
 	display: inline-block;
   }
 
-#account, #discord {
+#account, #discord, #mobile-account, #discord-mobile {
+    border-radius: 16px;
 	text-align: center;
-	background-color: #FF3635 !important;
-	color:white !important;
-  }
+	background-color: white !important;
+	color: black !important;
+    box-shadow: 1px 1px 10px 5px rgba(0,0,0,.16);
+}
 
-  #discord {
+#account:hover, #discord:hover {
+    background-color: rgb(174, 171, 171);
+    color: #BF0C00 !important;
+}
+
+#discord, #account, #mobile-account, #discord-mobile {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
 	align-items: center;
   }
 
-#discord.success, #discord-mobile.success {
+#discord.success .connect-status, #discord-mobile.success .connect-status {
     background-color: rgb(49, 219, 49) !important;
-	color: black !important;
 }
 
-#discord.success:hover, #discord-mobile.success:hover {
-    background-color: rgb(49, 219, 49) !important;
-	color: black !important;
+#discord.failure .connect-status, #discord-mobile.failure .connect-status {
+    background-color: red !important;
 }
 
-#discord.failure, #discord-mobile.failure {
-    background-color: #F72119 !important;
-}
-
-#discord.failure:hover, #discord-mobile.failure:hover {
-    background-color: #F72119 !important;
-}
-
-  .button.loading, .button.connect {
+.button.loading, .button.connect {
 	background-color: #FF3635 !important;
 	color: white !important;
-  }
+}
 
-  #account.connected:hover {
-	  background-color: #FF3635 !important;
-	  cursor: default;
-  }
+#account.connected:hover, #mobile-account.connected:hover {
+	background-color: white !important;
+	color: black !important;
+	cursor: default;
+}
 
-  .button.loading:hover {
+#account.connected .connect-status, #mobile-account.connected .connect-status {
+    background-color: rgb(49, 219, 49) !important;
+	cursor: default;
+}
+
+.button.loading:hover {
 	background-color: #FF3635 !important;
 	color: white !important;
-  }
+}
 
-  .button.connect:hover {
+.button.connect:hover {
 	background-color: #FF3635 !important;
 	color: white !important;
 	cursor: pointer;
-  }
+}
 
 .body {
     background-color: #100C08;
@@ -300,6 +316,7 @@ h5 {
 	/* border: 1px solid white; */
 	font-family: "MSB";
 	border-radius: 8px;
+    box-shadow: 1px 1px 10px 9px rgba(0,0,0,.16);
 }
 
 .etherscan-link {
@@ -320,9 +337,10 @@ h5 {
     width: 33vw;
     text-align: center;
 	border-radius: 8px;
+    box-shadow: 1px 1px 10px 9px rgba(0,0,0,.16);
 }
 
-#error-popup, #status-popup, #discord-popup {
+#error-popup, #status-popup, #discord-popup, #info-popup {
 	border-radius: 8px;
 	background-color: white;
     z-index: 99999;
@@ -335,6 +353,69 @@ h5 {
     /* border: solid 1px black; */
     text-align: center;
     box-shadow: 0 0 5000px 5000px rgba(0,0,0,0.88);
+}
+
+#info-popup {
+	height: initial;
+	width: initial;
+    min-width: 75vw;
+    min-height: 30vh;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: space-around;
+}
+
+#info-popup #info-image-wrapper {
+	width: 40%;
+}
+
+#info-image-wrapper img {
+	width: 100%;
+	border-top-left-radius: 8px;
+	border-bottom-left-radius: 8px;
+}
+
+#info-popup #listing-info {
+	width: 60%;
+	position: relative;
+}
+
+#info-popup #listing-info h1 {
+	font-family: "KFA";
+}
+
+#info-popup #close-div {
+	width: 100%;
+	text-align: right;
+	padding-right: .5vw;
+	padding-top: 1vw;
+}
+
+
+#info-popup #close {
+	background-color: white;
+	color: #F72119;
+	font-size: 2vw;
+	line-height: 2vw;
+	min-width: 5%;
+	padding: .75vw;
+	padding-top: .2vw;
+	padding-bottom: .2vw;
+	border-radius: 50%;
+    box-shadow: 1px 1px 10px 5px rgba(0,0,0,.16);
+}
+
+#info-popup #close:hover {
+	cursor: pointer;
+	color: #f04f49;
+	opacity: .8;
+}
+
+#info-popup #listing-description {
+	max-height: 20vh;
+	overflow-y: scroll;
+	padding: 1vw;
 }
 
 #error-popup button {
@@ -413,7 +494,7 @@ h5 {
     background-color: #F72119 !important;
 }
 
-#block-screen, #block-screen-error, #block-screen-status, #block-screen-approval, #block-screen-loading, #block-screen-discord {
+#block-screen, #block-screen-error, #block-screen-status, #block-screen-approval, #block-screen-loading, #block-screen-discord, #block-screen-info {
     z-index: 9998;
     width: 100vw;
     opacity: 0;
@@ -462,6 +543,64 @@ h5 {
 
 @media screen and (max-width:991px) {
 
+	#info-popup #listing-info h2 {
+		font-family: "KFA";
+		font-size: 5.4vh;
+		line-height: 5.4vh;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+
+	#info-popup #close {
+		position: absolute;
+	}
+
+	#info-popup h3 {
+		margin-top: 10px;
+	}
+
+	#info-popup {
+		height: initial;
+		min-height: 30vh;
+		display: flex;
+		flex-direction: column;
+		align-items: space-around;
+		justify-content: center;
+		text-align: center;
+	}
+
+	#info-popup #close {
+		top: 2.5%;
+		right: 4%;
+		font-size: 3vh;
+		line-height: 3vh;
+		min-width: 12%;
+		padding: 1.5vh;
+	}
+	
+	#info-popup #info-image-wrapper {
+		width: 100%;
+	}
+
+	#info-popup img {
+		width: 100%;
+		border-radius: 0;
+		border-top-left-radius: 8px;
+		border-top-right-radius: 8px;
+	}
+	
+	#info-popup #listing-info {
+		width: 95%;
+		margin: auto;
+		max-height: 45vh;
+		overflow-y: scroll;
+	}
+
+	#info-popup #listing-description {
+		max-height: initial;
+		overflow-y: initial;
+		padding-top: 0 !important;
+	}
 
 	#error-popup button {
 		width: 90%;
@@ -537,12 +676,6 @@ h5 {
 		display: block !important;
 	}
 
-	#mobile-account {
-		width: 80%;
-		background-color: #FF3635 !important;
-		color: white !important;
-	  }
-
 	#about {
 		padding: 0;
 	}
@@ -601,6 +734,11 @@ h5 {
 	#discord-popup {
 		height: 45vh;
 	  }
+
+	#info-popup {
+		width: 85vw;
+        min-height: 20vh;
+	}
 
     #error-popup p, #status-popup p {
         font-size: 4vw !important;
@@ -663,6 +801,16 @@ h5 {
 	}
 	.button.connect-button {
 		margin-top: 0
+	}
+}
+
+@media screen and (min-width:2000px) {
+	.connect-status {
+		height: 15px;
+		width: 15px;
+		background-color: red;
+		border-radius: 50%;
+		display: inline-block;
 	}
 }
 

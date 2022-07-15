@@ -51,7 +51,7 @@ function showCreate() {
     else {
         $("#scroll-indicator").addClass("hidden");
     }
-    $("#listing-select-div").addClass('hidden');
+    $("#listing-select").addClass('hidden');
     $("#create-button").addClass("active");
     $("#modify-button").removeClass("active");
 }
@@ -65,7 +65,7 @@ function showModify() {
     else {
         $("#scroll-indicator").addClass("hidden");
     }
-    $("#listing-select-div").removeClass('hidden');
+    $("#listing-select").removeClass('hidden');
     $("#modify-button").addClass("active");
     $("#create-button").removeClass("active");
 }
@@ -109,11 +109,11 @@ function clearPendingTxs() {
 
  // ======= DISCORD UTILS ========
 
-// Mainnet
-//  const identityMapperAddress = "0x88C6a2aDc73Aaf4A5E659d5f170480fcdc595532";
+// Polygon
+ const identityMapperAddress = "0x88C6a2aDc73Aaf4A5E659d5f170480fcdc595532";
 
 // Testnet
-const identityMapperAddress = "0xffccE647DA8a266A8779875b9c68cb51DC236C80";
+// const identityMapperAddress = "0xffccE647DA8a266A8779875b9c68cb51DC236C80";
 
  const identityMapperAbi = () => {
      return `[{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"addressToDiscord","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"addressToTwitter","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"discordTag_","type":"string"}],"name":"setDiscordIdentity","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"twitterTag_","type":"string"}],"name":"setTwitterIdentity","outputs":[],"stateMutability":"nonpayable","type":"function"}]`;
@@ -177,7 +177,7 @@ const identityMapperAddress = "0xffccE647DA8a266A8779875b9c68cb51DC236C80";
      }
  }
  
- var discordSet = false;
+ let discordSet = false;
  
  const updateDiscord = async() => {
     if (!discordSet) {
@@ -186,29 +186,20 @@ const identityMapperAddress = "0xffccE647DA8a266A8779875b9c68cb51DC236C80";
          if (currentDiscord) {
              discordSet = true
             $("#set-discord-button").addClass("hidden");
-             $("#discord-text").text("SET!");
              $("#discord").addClass("success");
              $("#discord").removeClass("failure");
-             $("#discord-text-mobile").text("SET!");
              $("#discord-mobile").addClass("success");
              $("#discord-mobile").removeClass("failure"); 
-             $("#discord-img").attr("src", "./images/dc-black.png");
-             $("#edit-img").attr("src", "./images/edit.png");
-             $("#discord-mobile #discord-img").attr("src", "./images/dc-black.png");
-             $("#discord-mobile #edit-img").attr("src", "./images/edit.png");
+             $("#discord-text").text(`${currentDiscord.substr(0,9)}...`);
+             $("#account").addClass(`connected`);
+             $("#discord-text-mobile").text(`${currentDiscord.substr(0,9)}...`);
          }
          else {
             $("#set-discord-button").removeClass("hidden");
-             $("#discord-text").text("NOT SET!");
              $("#discord").addClass("failure");
              $("#discord").removeClass("success"); 
-             $("#discord-text-mobile").text("NOT SET!");    
              $("#discord-mobile").addClass("failure"); 
              $("#discord-mobile").removeClass("success");
-             $("#discord-img").attr("src", "./images/dc-white.png");
-             $("#edit-img").attr("src", "./images/edit-white.png");
-             $("#discord-mobile #discord-img").attr("src", "./images/dc-white.png");
-             $("#discord-mobile #edit-img").attr("src", "./images/edit-white.png");
          }
      }
     if ($("#approval").hasClass("hidden") && $("#set-discord").hasClass("hidden")) {
@@ -219,7 +210,7 @@ const identityMapperAddress = "0xffccE647DA8a266A8779875b9c68cb51DC236C80";
     }
  }
  
- var timeout = 100;
+ let timeout = 100;
  
  setInterval(async()=>{
      await updateDiscord();

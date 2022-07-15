@@ -59,6 +59,10 @@ textarea {
 
 @media screen and (max-width: 991px) {
 
+    #selector-div {
+        padding-top: 30px;
+    }
+
     #listing-select {
         font-size: 3vh !important;
     }

@@ -63,17 +63,14 @@ const loadingDiv = `<div id="ex1" class="partner-collection example">
                         <div class="cover">
                             <button class="button loading" onclick="connect()">LOADING<span class="one">.</span><span class="two">.</span><span class="three">.</span></button>
                         </div>
-                        <img class="collection-img" src="./images/silhouette.png">
+                        <div class="image-wrapper">
+                            <svg id="info" onclick="openListingInfo()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill="white" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+                            <img class="collection-img" src="./images/silhouette.png">
+                            <h4 id="minted-icon"><span id="ex-remaining">???</span>/<span id="ex-amount">???</span></h4>
+                        </div>
                         <div class="collection-info">
                             <h3>???</h3>
-                            <h4>???/??? Purchased
-                            <br>
-                            ??? <img src="${tokenImgURL}" class="token-icon">
-                            <br>
-                            <span class="end-time">Ends MM/DD/YYYY HH:MM AM</span>
-                            </h4>
-                            <div class="inside-text collection-description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ornare neque ut aliquam lobortis. Morbi non tellus dui. Proin pellentesque nisl non augue volutpat, eu convallis nibh pretium.
-                            </div>
+                            <h4>??? <img src="https://github.com/saintmaxi/shrine-market-dev/blob/main/images/token.png?raw=true" class="token-icon"></h4>
                             <button class="button">PURCHASE</button>
                         </div>
                     </div>`
@@ -104,6 +101,24 @@ const checkTokenApproval = async() => {
         $("#onboarding-section").removeClass("hidden");
     }
 };
+
+const claimRewards = async() => {
+    try {
+        await token.harvestReward().then( async(tx_) => {
+            await waitForTransaction(tx_);
+        });
+    }
+    catch (error) {
+        if ((error.message).includes("User denied transaction signature")) {
+            console.log("Transaction rejected.");
+        }
+        else {
+            await displayErrorMessage("An error occurred. See console and window alert for details...")
+            window.alert(error);
+            console.log(error);
+        }
+    }
+}
 
 const updateTokenBalance = async() => {
     const userAddress = await getAddress();
@@ -171,11 +186,11 @@ const splitArrayToChunks = (array_, chunkSize_) => {
     return _arrays;
 };
 
-var loadedCollections = false;
-var liveListings = [];
-var pendingListings = [];
-var liveTimerPending = [];
-var pendingTimerPending = [];
+let loadedCollections = false;
+let liveListings = [];
+let pendingListings = [];
+let liveTimerPending = [];
+let pendingTimerPending = [];
 
 setInterval(async()=>{
     if (loadedCollections) {
@@ -186,9 +201,9 @@ setInterval(async()=>{
                 let endTime = Number((await market.contractToWLVendingItems(tokenAddress, id)).endTime);
                 let distance = endTime - now;
         
-                var hours = Math.floor(distance / (60 * 60));
-                var minutes = Math.floor((distance % (60 * 60)) / (60));
-                var seconds = Math.floor((distance % (60)));
+                let hours = Math.floor(distance / (60 * 60));
+                let minutes = Math.floor((distance % (60 * 60)) / (60));
+                let seconds = Math.floor((distance % (60)));
 
                 if (hours < 10) {
                     hours = `0${hours}`;
@@ -229,9 +244,9 @@ setInterval(async()=>{
                 let startTime = Number((await market.contractToWLVendingItems(tokenAddress, id)).startTime);
                 let distance = startTime - now;
         
-                var hours = Math.floor(distance / (60 * 60));
-                var minutes = Math.floor((distance % (60 * 60)) / (60));
-                var seconds = Math.floor((distance % (60)));
+                let hours = Math.floor(distance / (60 * 60));
+                let minutes = Math.floor((distance % (60 * 60)) / (60));
+                let seconds = Math.floor((distance % (60)));
 
                 if (hours < 10) {
                     hours = `0${hours}`;
@@ -262,6 +277,8 @@ setInterval(async()=>{
         }
     }
 }, 1000)
+
+let idToListingInfo = new Map();
 
 const loadCollections = async() => {
     const userAddress = await getAddress();
@@ -295,7 +312,10 @@ const loadCollections = async() => {
             let valid =  WLinfo.endTime > (Date.now()/1000);
             let imageUri = (WLinfo.imageUri).includes("https://") ? WLinfo.imageUri : `https://${WLinfo.imageUri}`;
             let projectUri = (WLinfo.projectUri).includes("https://") ? WLinfo.projectUri : `https://${WLinfo.projectUri}`;
-            let description = (WLinfo.description).substr((WLinfo.description).indexOf(" ") + 1)
+            let description = WLinfo.description;
+
+            idToListingInfo.set(id, {title: WLinfo.title, image: imageUri, website: projectUri, description: description,
+                                        purchased: minted, maxSlots: maxSlots, price: collectionPrice});
 
             if (started && valid) {
                 liveListings.push(id);
@@ -318,18 +338,15 @@ const loadCollections = async() => {
                     button = `<button class="mint-prompt-button button" id="${id}-mint-button" onclick="purchase('${tokenAddress}', ${id})">PURCHASE</button>`;
                 }
                 let fakeJSX = `<div class="partner-collection" id="project-${id}">
-                                <a class="clickable link" href="${projectUri}" target="_blank" style="text-decoration: none;"><img class="website" src="./images/website-black.png"></a>
-                                <h4 class="end-time" id="timer-${id}"><span class="one">.</span><span class="two">.</span><span class="three">.</span></h4>
-                                <img class="collection-img" src="${imageUri}">
+                                <div class="image-wrapper">
+                                    <svg id="info" onclick="openListingInfo(${id})" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill="white" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+                                    <img class="collection-img" src="${imageUri}">
+                                    <div class="end-time" id="timer-${id}"><span class="one">.</span><span class="two">.</span><span class="three">.</span></div>
+                                    <h4 id="minted-icon"><span id="${id}-supply">${minted}</span>/<span id="${id}-max-supply">${maxSlots}</span></h4>
+                                </div>
                                 <div class="collection-info">
                                     <h3>${(WLinfo.title).toUpperCase()}</h3>
-                                    <h4>${collectionPrice} <img src="${tokenImgURL}" class="token-icon">
-                                    <br>
-                                    <span id="${id}-supply">${minted}</span>/<span id="${id}-max-supply">${maxSlots}</span> Purchased
-                                    </h4>
-                                    <div class="inside-text collection-description">
-                                    ${(description).replaceAll("\n", "<br>")}
-                                    </div>
+                                    <h4>${collectionPrice} <img src="${tokenImgURL}" class="token-icon"></h4>
                                 </div>
                                 ${button}
                                 </div>`
@@ -348,15 +365,16 @@ const loadCollections = async() => {
                 else if (minted == maxSlots) {
                     button = `<button disabled class="mint-prompt-button button purchased" id="${id}-mint-button">SOLD OUT</button>`;
                 }
+
                 let fakeJSX = `<div class="partner-collection" id="project-${id}">
-                                <a class="clickable link" href="${projectUri}" target="_blank" style="text-decoration: none;"><img class="website" src="./images/website-black.png"></a>
-                                <img class="collection-img" src="${imageUri}">
+                                <div class="image-wrapper">
+                                    <svg id="info" onclick="openListingInfo(${id})" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill="white" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+                                    <img class="collection-img" src="${imageUri}">
+                                    <h4 id="minted-icon"><span id="${id}-supply">${minted}</span>/<span id="${id}-max-supply">${maxSlots}</span></h4>
+                                </div>
                                 <div class="collection-info">
                                     <h3>${(WLinfo.title).toUpperCase()}</h3>
-                                    <h4>${collectionPrice} <img src="${tokenImgURL}" class="token-icon"> <br> <span id="${id}-supply">${minted}</span>/<span id="${id}-max-supply">${maxSlots}</span> Purchased</h4>
-                                    <div class="inside-text collection-description">
-                                    ${(description).replaceAll("\n", "<br>")}
-                                    </div>
+                                    <h4>${collectionPrice} <img src="${tokenImgURL}" class="token-icon"></h4>
                                 </div>
                                 ${button}
                                 </div>`
@@ -390,10 +408,36 @@ const loadCollections = async() => {
     }
 
     if (numLive == 0) {
-        $("#live-collections").append("<div id='no-live-msg'><h2>No active listings.<br>Join our Discord to see what's next!</h2><br><a href='https://discord.com/triplesixjewels' target='_blank'><button class='button'>JOIN DISCORD</button></a></div>");
+        $("#live-collections").append("<div id='no-live-msg'><h2>No active listings.<br>Join our Discord to see what's next!</h2><br><a href='https://discord.gg/theshrine' target='_blank'><button class='button'>JOIN DISCORD</button></a></div>");
     }
 
     loadedCollections = true;
+}
+
+const openListingInfo = async(id) => {
+    if (!($("#info-popup").length)) {
+        let listingInfo = idToListingInfo.get(id);
+        let fakeJSX = `<div id="info-popup">
+                            <div id="info-image-wrapper">
+                                <a href="${listingInfo.website}" target="_blank"><svg id="info-link" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill="black" d="M256 64C256 46.33 270.3 32 288 32H415.1C415.1 32 415.1 32 415.1 32C420.3 32 424.5 32.86 428.2 34.43C431.1 35.98 435.5 38.27 438.6 41.3C438.6 41.35 438.6 41.4 438.7 41.44C444.9 47.66 447.1 55.78 448 63.9C448 63.94 448 63.97 448 64V192C448 209.7 433.7 224 416 224C398.3 224 384 209.7 384 192V141.3L214.6 310.6C202.1 323.1 181.9 323.1 169.4 310.6C156.9 298.1 156.9 277.9 169.4 265.4L338.7 96H288C270.3 96 256 81.67 256 64V64zM0 128C0 92.65 28.65 64 64 64H160C177.7 64 192 78.33 192 96C192 113.7 177.7 128 160 128H64V416H352V320C352 302.3 366.3 288 384 288C401.7 288 416 302.3 416 320V416C416 451.3 387.3 480 352 480H64C28.65 480 0 451.3 0 416V128z"/></svg></a>
+                                <img id="listing-image" src="${listingInfo.image}">
+                                <span class="hide-on-desktop" id="close" onclick="$('#info-popup').remove();$('#block-screen-info').remove()">X</span>
+                            </div>
+                            <div id="listing-info">
+                                <div class="hide-on-mobile" id="close-div">
+                                    <span id="close" onclick="$('#info-popup').remove();$('#block-screen-info').remove()">X</span>
+                                </div>
+                                <h1 class="hide-on-mobile">${listingInfo.title}</h1>
+                                <h2 class="hide-on-desktop">${listingInfo.title}</h2>
+                                <h4><span id="${id}-supply">${listingInfo.purchased}</span>/<span id="${id}-max-supply">${listingInfo.maxSlots}</span> Purchased</h4>
+                                <h4>${listingInfo.price} <img src="${tokenImgURL}" class="token-icon"></h4>
+                                <p id="listing-description">${listingInfo.description}</p>
+                            </div>
+                       </div>`;
+        $("body").append(fakeJSX);
+        let height = $(document).height();
+        $("body").append(`<div id='block-screen-info' onclick="$('#info-popup').remove();$('#block-screen-info').remove()" style="height:${height}px"></div>`);
+    }
 }
 
 const updateSupplies = async() => {
@@ -430,7 +474,7 @@ const waitForTransaction = async(tx_) => {
 };
 
 // Resuming UI display, refreshing market for pending txs across pages
-var pendingTransactions = localStorage.getItem("ShrineMarketPendingTxs");
+let pendingTransactions = localStorage.getItem("ShrineMarketPendingTxs");
 
 if (!pendingTransactions) {
     pendingTransactions = new Set();
@@ -508,15 +552,16 @@ const switchToPolygon = async() => {
 const updateInfo = async () => {
     await checkTokenApproval();
     let userAddress = await getAddress();
-    $("#account").text(`${userAddress.substr(0,7)}..`);
+    $("#account-text").text(`${userAddress.substr(0,7)}...`);
     $("#account").addClass(`connected`);
-    $("#mobile-account").text(`${userAddress.substr(0,7)}...`);
+    $("#mobile-account-text").text(`${userAddress.substr(0,7)}...`);
+    $("#mobile-account").addClass(`connected`);
 };
 
 setInterval( async() => {
     await updateTokenBalance();
     await updateInfo();
-    // await updateCurrentChain();
+    await updateCurrentChain();
     if (loadedCollections) {
         await updateSupplies();
     }
@@ -534,36 +579,29 @@ provider.on("network", async(newNetwork, oldNetwork) => {
 });
 
 window.onload = async() => {
+    $("#claim-button").height($(".shrine-container:nth-child(2) img").height());
+    $("#claim-button").removeClass("hidden");
     if (!(await getAddress())) {
-        // const connectPrompt = ` <div id="ex1" class="partner-collection example">
-        //                             <div class="cover">
-        //                                 <button class="button connect" onclick="connect()">CONNECT</button>
-        //                             </div>
-        //                             <img class="collection-img" src="./images/question.jpeg">
-        //                             <div class="collection-info">
-        //                                 <h3>???</h3>
-        //                                 <h4>???/??? Purchased
-        //                                 <br>
-        //                                 ??? <img src="${tokenImgURL}" class="token-icon">
-        //                                 <br>
-        //                                 Ends MM/DD/YYYY
-        //                                 </h4>
-        //                                <div class="inside-text collection-description">
-        //                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum at hendrerit augue, ultrices aliquam ante. Duis sodales eros consequat magna efficitur, non ullamcorper mauris tristique.
-        //                                 </div>
-        //                                 <button class="button">PURCHASE</button>
-        //                             </div>
-        //                         </div>`
-        // $("#live-collections").empty();
-        // $("#past-collections").empty();
-        // $("#live-collections").append(connectPrompt);
-        // $("#past-collections").append(connectPrompt);
-        console.log("using infura")
-        await loadInfuraListings();
+        const connectPrompt = ` <div id="ex1" class="partner-collection example">
+                                <div class="image-wrapper">
+                                    <svg id="info" onclick="openListingInfo()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill="white" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
+                                    <img class="collection-img" src="./images/silhouette.png">
+                                    <h4 id="minted-icon"><span id="ex-remaining">???</span>/<span id="ex-amount">???</span></h4>
+                                </div>
+                                <div class="collection-info">
+                                    <h3>???</h3>
+                                    <h4>??? <img src="https://github.com/saintmaxi/shrine-market-dev/blob/main/images/token.png?raw=true" class="token-icon"></h4>
+                                    <button class="button" onclick="connect()">CONNECT</button>
+                                </div>
+                            </div>`
+        $("#live-collections").empty();
+        $("#past-collections").empty();
+        $("#live-collections").append(connectPrompt);
+        $("#past-collections").append(connectPrompt);
     }
     else {
         console.log("using wallet");
-        // await updateCurrentChain();
+        await updateCurrentChain();
         await updateInfo();
         let userAddress = await getAddress();
         if ((await market.isAuthorized(tokenAddress, userAddress))) {

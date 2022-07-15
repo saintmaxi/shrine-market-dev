@@ -408,9 +408,10 @@
     #navbar {
         touch-action: manipulation;
         width: 10%;
-        background-color: white;
+        background-color: white !important;
         background-image: url("../images/burger.png");
         background-size: 100% 100%;
+        box-shadow: 1px 1px 10px 5px rgba(0,0,0,.16);
     }
 
     #mobile-wallet-connect-div {
@@ -435,8 +436,6 @@
     }
 
     #mobile-account, #discord-mobile {
-        background-color: #FF3635 !important;
-        color: white !important;
         width: 40%;
     }
 
