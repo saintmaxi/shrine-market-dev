@@ -551,10 +551,6 @@ h5 {
 		margin-bottom: 10px;
 	}
 
-	#info-popup #close {
-		position: absolute;
-	}
-
 	#info-popup h3 {
 		margin-top: 10px;
 	}
@@ -570,12 +566,15 @@ h5 {
 	}
 
 	#info-popup #close {
+		position: absolute;
 		top: 2.5%;
 		right: 4%;
 		font-size: 3vh;
 		line-height: 3vh;
 		min-width: 12%;
 		padding: 1.5vh;
+		padding-top: 1vh;
+		padding-bottom: 1vh;
 	}
 	
 	#info-popup #info-image-wrapper {
