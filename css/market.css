@@ -810,7 +810,8 @@ h4 {
         font-size: 3.4vh;
         line-height: 3.4vh;
         padding: 2vh;
-        width: 45%;
+        margin-bottom: 10px;
+        width: 98%;
     }
 
     .navbar-container {
