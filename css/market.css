@@ -300,6 +300,7 @@
 }
 
 .partner-collection .image-wrapper {
+    width: 100%;
     position: relative;
     text-align: center;
 }
