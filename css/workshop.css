@@ -15,8 +15,12 @@
     margin-bottom: .4vw;
 }
 
+input {
+	border-radius: 4px;
+}
+
 #market-section {
-    padding-top: 0;
+    text-align: center;
 }
 
 textarea {

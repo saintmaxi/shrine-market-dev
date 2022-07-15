@@ -2,6 +2,11 @@
     --main-bg-color: #447CFC;
   }
 
+@font-face {  
+	font-family: 'KFA';
+	src: URL('./KranaFat-A.woff2') format('truetype');
+}  
+
 @keyframes blinker {
     50% {
       opacity: 0;
@@ -23,7 +28,6 @@
 /* start header/navbar styling */
 
 #top  {
-    position: fixed;
     z-index: 9999;
     width: 100%;
     /* opacity: .95; */
@@ -35,8 +39,8 @@
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     height: 9vh;
-	font-family: 'Syke', sans-serif;
-    border-bottom: 1px solid black;
+	font-family: 'MSB', sans-serif;
+    /* border-bottom: solid 1px black; */
 }
 
 #project-name {
@@ -54,14 +58,15 @@
     justify-content: center;
     align-items: center;
     width: 30%;
-    font-size: 1.5vw;
-    line-height: 1.5vw;
+    font-size: 2vw;
+    line-height: 2vw;
     text-align: center;
 }
 
 #title {
     width: 100%;
     letter-spacing: 3px;
+    font-family: "KFA";
 }
 
 #title img {
@@ -81,12 +86,13 @@
 }
 
 .header-menu {
-	font-size: 1vw;
-    line-height: 1vw;
-    letter-spacing: 2px;
+	font-size: 1.5vw;
+    line-height: 1.5vw;
+    letter-spacing: 1px;
     width: 25%;
     margin: 1%;
     text-align: center;
+    font-family: "KFA";
 }
 
 .header-menu a {
@@ -251,7 +257,6 @@
     /* start header-navbar styling */
 
     #top {
-        position: initial;
         display: initial;
     }
 
@@ -273,10 +278,6 @@
 
     #title img {
         width: 15%;
-    }
-
-    #title-section {
-       font-size: 4vh !important;
     }
 
     #socials {
@@ -329,7 +330,7 @@
         margin-top: -100%;
         transition: all 0.4s;
         background-color: white;
-        border-bottom: solid 1px black;
+        /* border-bottom: solid 1px black; */
     }
     
     #mobile-nav-menu.expanded {
