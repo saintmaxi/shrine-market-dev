@@ -474,10 +474,6 @@ h4 {
     background-color: rgba(0,0,0,0.88) !important;
 }
 
-#close {
-    padding: .2vw;
-}
-
 #mint-button-div {
     display: -webkit-box;
     display: -webkit-flex;
@@ -907,11 +903,6 @@ h4 {
 
     .mint-input-part {
         width: 100%;
-    }
-
-    #close {
-        padding: 1vh;
-        font-size: 4vh;
     }
     
     #mint-prompt h3 {

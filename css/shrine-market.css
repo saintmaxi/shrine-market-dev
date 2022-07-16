@@ -394,14 +394,7 @@ h5 {
 
 
 #info-popup #close {
-	background-color: white;
-	color: #F72119;
-	font-size: 2vw;
-	line-height: 2vw;
-	min-width: 5%;
-	padding: .75vw;
-	padding-top: .2vw;
-	padding-bottom: .2vw;
+    background-color: rgb(124, 121, 121);
 	border-radius: 50%;
     box-shadow: 1px 1px 10px 5px rgba(0,0,0,.16);
 }
@@ -570,13 +563,7 @@ h5 {
 		position: absolute;
 		top: 2.5%;
 		right: 4%;
-		font-size: 3vh;
-		line-height: 3vh;
-		width: 35px;
-		height: 35px;
-		padding: 1.5vh;
-		padding-top: 1vh;
-		padding-bottom: 1vh;
+		width: 12%;
 	}
 	
 	#info-popup #info-image-wrapper {
