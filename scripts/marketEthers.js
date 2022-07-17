@@ -594,8 +594,8 @@ const loadAlchemyListings = async() => {
     $("#past-collections").empty();
     $("#live-collections").append(jsonData.liveJSX);
     $("#past-collections").append(jsonData.pastJSX);
-    $("#num-live").html(jsonData.numLive);
-    $("#num-past").html(jsonData.numPast);
+    $("#num-live").html(`(${jsonData.numLive})`);
+    $("#num-past").html(`(${jsonData.numPast})`);
 
     if (jsonData.numLive == 0) {
         $("#live-collections").append("<div id='no-live-msg'><h2>No active listings.<br>Join our Discord to see what's next!</h2><br><a href='https://discord.gg/theshrine' target='_blank'><button class='button'>JOIN DISCORD</button></a></div>");
