@@ -417,6 +417,10 @@ const loadCollections = async() => {
         $("#live-collections").append("<div id='no-live-msg'><h2>No active listings.<br>Join our Discord to see what's next!</h2><br><a href='https://discord.gg/theshrine' target='_blank'><button class='button'>JOIN DISCORD</button></a></div>");
     }
 
+    if (numPast == 0) {
+        $("#past-collections").append("<div id='no-live-msg'><h2>No past listings.<br>Join our Discord to see what's next!</h2><br><a href='https://discord.gg/theshrine' target='_blank'><button class='button'>JOIN DISCORD</button></a></div>");
+    }
+
     loadedCollections = true;
 }
 
@@ -595,6 +599,10 @@ const loadAlchemyListings = async() => {
 
     if (jsonData.numLive == 0) {
         $("#live-collections").append("<div id='no-live-msg'><h2>No active listings.<br>Join our Discord to see what's next!</h2><br><a href='https://discord.gg/theshrine' target='_blank'><button class='button'>JOIN DISCORD</button></a></div>");
+    }
+
+    if (jsonData.numPast == 0) {
+        $("#past-collections").append("<div id='no-live-msg'><h2>No past listings.<br>Join our Discord to see what's next!</h2><br><a href='https://discord.gg/theshrine' target='_blank'><button class='button'>JOIN DISCORD</button></a></div>");
     }
 
     idToListingInfo = new Map(jsonData.idToListingInfo);
