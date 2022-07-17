@@ -110,10 +110,10 @@ function clearPendingTxs() {
  // ======= DISCORD UTILS ========
 
 // Polygon
-//  const identityMapperAddress = "0x88C6a2aDc73Aaf4A5E659d5f170480fcdc595532";
+ const identityMapperAddress = "0x88C6a2aDc73Aaf4A5E659d5f170480fcdc595532";
 
 // Testnet
-const identityMapperAddress = "0xffccE647DA8a266A8779875b9c68cb51DC236C80";
+// const identityMapperAddress = "0xffccE647DA8a266A8779875b9c68cb51DC236C80";
 
  const identityMapperAbi = () => {
      return `[{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"addressToDiscord","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"addressToTwitter","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"discordTag_","type":"string"}],"name":"setDiscordIdentity","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"twitterTag_","type":"string"}],"name":"setTwitterIdentity","outputs":[],"stateMutability":"nonpayable","type":"function"}]`;
