@@ -348,7 +348,7 @@ const loadCollections = async() => {
                                     <svg id="info" onclick="openListingInfo(${id})" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill="white" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
                                     <img class="collection-img" src="${imageUri}">
                                     <div class="end-time" id="timer-${id}"><span class="one">.</span><span class="two">.</span><span class="three">.</span></div>
-                                    <h4 id="minted-icon"><span id="${id}-supply">${minted}</span>/<span id="${id}-max-supply">${maxSlots}</span></h4>
+                                    <h4 id="minted-icon"><span id="${id}-supply">${maxSlots - minted}</span>/<span id="${id}-max-supply">${maxSlots}</span></h4>
                                 </div>
                                 <div class="collection-info">
                                     <h3>${(WLinfo.title).toUpperCase()}</h3>
@@ -376,7 +376,7 @@ const loadCollections = async() => {
                                 <div class="image-wrapper">
                                     <svg id="info" onclick="openListingInfo(${id})" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill="white" d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256s256-114.6 256-256S397.4 0 256 0zM256 128c17.67 0 32 14.33 32 32c0 17.67-14.33 32-32 32S224 177.7 224 160C224 142.3 238.3 128 256 128zM296 384h-80C202.8 384 192 373.3 192 360s10.75-24 24-24h16v-64H224c-13.25 0-24-10.75-24-24S210.8 224 224 224h32c13.25 0 24 10.75 24 24v88h16c13.25 0 24 10.75 24 24S309.3 384 296 384z"/></svg>
                                     <img class="collection-img" src="${imageUri}">
-                                    <h4 id="minted-icon"><span id="${id}-supply">${minted}</span>/<span id="${id}-max-supply">${maxSlots}</span></h4>
+                                    <h4 id="minted-icon"><span id="${id}-supply">${maxSlots - minted}</span>/<span id="${id}-max-supply">${maxSlots}</span></h4>
                                 </div>
                                 <div class="collection-info">
                                     <h3>${(WLinfo.title).toUpperCase()}</h3>
@@ -439,7 +439,7 @@ const openListingInfo = async(id) => {
                                 </div>
                                 <h1 class="hide-on-mobile">${listingInfo.title}</h1>
                                 <h2 class="hide-on-desktop">${listingInfo.title}</h2>
-                                <h4><span id="${id}-supply">${listingInfo.purchased}</span>/<span id="${id}-max-supply">${listingInfo.maxSlots}</span> Purchased</h4>
+                                <h4><span id="${id}-supply">${listingInfo.maxSlots - listingInfo.purchased}</span>/<span id="${id}-max-supply">${listingInfo.maxSlots}</span> Available</h4>
                                 <h4>${listingInfo.price} <img src="${tokenImgURL}" class="token-icon"></h4>
                                 <p id="listing-description">${listingInfo.description}</p>
                             </div>
@@ -469,7 +469,7 @@ const updateSupplies = async() => {
             $(`#${id}-mint-button`).addClass("purchased");
             $(`#${id}-mint-button`).prop("disabled", true);
         }
-        $(`#${id}-supply`).text(minted);
+        $(`#${id}-supply`).text(maxSlots - minted);
     }
 }
 
