@@ -36,6 +36,28 @@ const tokenImgURL = "https://github.com/saintmaxi/shrine-market-dev/blob/main/im
 
 /*********************************END CONFIG************************************/
 
+let idToListingInfo = new Map();
+
+const loadAlchemyListings = async () => {
+    const jsonData = await fetch(`https://vxi8bzby29.execute-api.us-east-1.amazonaws.com/haki-market`).then(res => res.json());
+    $("#live-collections").empty();
+    $("#past-collections").empty();
+    $("#live-collections").append(jsonData.liveJSX);
+    $("#past-collections").append(jsonData.pastJSX);
+    $("#num-live").html(`(${jsonData.numLive})`);
+    $("#num-past").html(`(${jsonData.numPast})`);
+
+    if (jsonData.numLive == 0) {
+        $("#live-collections").append("<div id='no-live-msg'><h2>No active listings.<br>Join our Discord to see what's next!</h2><br><a href='https://discord.gg/theshrine' target='_blank'><button class='button'>JOIN DISCORD</button></a></div>");
+    }
+
+    if (jsonData.numPast == 0) {
+        $("#past-collections").append("<div id='no-live-msg'><h2>No past listings.<br>Join our Discord to see what's next!</h2><br><a href='https://discord.gg/theshrine' target='_blank'><button class='button'>JOIN DISCORD</button></a></div>");
+    }
+
+    idToListingInfo = new Map(jsonData.idToListingInfo);
+}
+
 if (window.ethereum == undefined) {
     displayErrorMessage('Use a web3 enabled browser to browse listings!');
     loadAlchemyListings();
@@ -283,8 +305,6 @@ setInterval(async () => {
         }
     }
 }, 1000)
-
-let idToListingInfo = new Map();
 
 const loadCollections = async () => {
     const userAddress = await getAddress();
@@ -589,26 +609,6 @@ provider.on("network", async (newNetwork, oldNetwork) => {
         location.reload();
     }
 });
-
-const loadAlchemyListings = async () => {
-    const jsonData = await fetch(`https://vxi8bzby29.execute-api.us-east-1.amazonaws.com/haki-market`).then(res => res.json());
-    $("#live-collections").empty();
-    $("#past-collections").empty();
-    $("#live-collections").append(jsonData.liveJSX);
-    $("#past-collections").append(jsonData.pastJSX);
-    $("#num-live").html(`(${jsonData.numLive})`);
-    $("#num-past").html(`(${jsonData.numPast})`);
-
-    if (jsonData.numLive == 0) {
-        $("#live-collections").append("<div id='no-live-msg'><h2>No active listings.<br>Join our Discord to see what's next!</h2><br><a href='https://discord.gg/theshrine' target='_blank'><button class='button'>JOIN DISCORD</button></a></div>");
-    }
-
-    if (jsonData.numPast == 0) {
-        $("#past-collections").append("<div id='no-live-msg'><h2>No past listings.<br>Join our Discord to see what's next!</h2><br><a href='https://discord.gg/theshrine' target='_blank'><button class='button'>JOIN DISCORD</button></a></div>");
-    }
-
-    idToListingInfo = new Map(jsonData.idToListingInfo);
-}
 
 window.onload = async () => {
     $("#claim-button").height($(".shrine-container:nth-child(2) img").height());
