@@ -59,7 +59,7 @@ const loadAlchemyListings = async () => {
 }
 
 if (window.ethereum == undefined) {
-    displayErrorMessage('Use a web3 enabled browser to browse listings!');
+    displayErrorMessage('Use a web3 enabled browser to purchase listings!');
     loadAlchemyListings();
 }
 
