@@ -39,7 +39,7 @@ const tokenImgURL = "https://github.com/saintmaxi/shrine-market-dev/blob/main/im
 let idToListingInfo = new Map();
 
 const loadAlchemyListings = async () => {
-    const jsonData = await fetch(`https://vxi8bzby29.execute-api.us-east-1.amazonaws.com/haki-market`).then(res => res.json());
+    const jsonData = await fetch(`https://5izv0tezjc.execute-api.us-east-1.amazonaws.com/default/haki-market`).then(res => res.json());
     $("#live-collections").empty();
     $("#past-collections").empty();
     $("#live-collections").append(jsonData.liveJSX);
