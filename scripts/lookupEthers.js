@@ -4,7 +4,7 @@
 /*********************************************************************************/
 
 const tokenAddress = "0x29e7509090C27DFc4eC85191e56EA86867760d73";
-const tokenAbi = () => { 
+const tokenAbi = () => {
     return `[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"}]`;
 };
 
@@ -39,32 +39,32 @@ if (window.ethereum == undefined) {
     displayErrorMessage('Use a web3 enabled browser and connect to use lookup tool!');
 }
 
-const provider = new ethers.providers.Web3Provider(window.ethereum,"any");
+const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
 const signer = provider.getSigner();
 const token = new ethers.Contract(tokenAddress, tokenAbi(), signer);
 const market = new ethers.Contract(marketAddress, marketAbi(), signer);
 
-const connect = async()=>{
+const connect = async () => {
     await provider.send("eth_requestAccounts", []);
 };
 
-const getAddress = async()=>{
+const getAddress = async () => {
     return await signer.getAddress()
 };
 
-const formatEther = (balance_)=>{
+const formatEther = (balance_) => {
     return ethers.utils.formatEther(balance_)
 };
 
-const parseEther = (eth_)=>{
+const parseEther = (eth_) => {
     return ethers.utils.parseEther(eth_)
 };
 
-const getChainId = async()=>{
+const getChainId = async () => {
     return await signer.getChainId()
 };
 
-const updateCurrentChain = async() => {
+const updateCurrentChain = async () => {
     if ((await getChainId()) !== correctChain) {
         displayErrorMessage(`Error: Wrong Network!<br><br><button class="button" onclick="switchToPolygon()">SWITCH TO POLYGON.</button>`, false);
     }
@@ -74,7 +74,7 @@ const updateCurrentChain = async() => {
     }
 }
 
-const switchToPolygon = async() => {
+const switchToPolygon = async () => {
     window.ethereum.request({
         method: "wallet_addEthereumChain",
         params: [{
@@ -91,7 +91,7 @@ const switchToPolygon = async() => {
     });
 }
 
-const updateTokenBalance = async() => {
+const updateTokenBalance = async () => {
     const userAddress = await getAddress();
     let balance = formatEther((await token.balanceOf(userAddress)));
     $("#token-balance").html(`${balance}`);
@@ -110,7 +110,7 @@ const splitArrayToChunks = (array_, chunkSize_) => {
 let projectToWL = new Map();
 let myWL = [];
 
-const loadCollectionsData = async() => {
+const loadCollectionsData = async () => {
     let userAddress = await getAddress();
     let numListings = Number(await market.getWLVendingItemsLength(tokenAddress));
     let fakeJSX = "";
@@ -119,7 +119,7 @@ const loadCollectionsData = async() => {
     let idToJSX = new Map();
     let fullJSX = "";
     for (const chunk of chunks) {
-        await Promise.all( chunk.map( async(id) => {
+        await Promise.all(chunk.map(async (id) => {
             let buyers = await market.getWLPurchasersOf(tokenAddress, id);
             let WLinfo = await market.contractToWLVendingItems(tokenAddress, id);
             let title = WLinfo.title;
@@ -131,9 +131,9 @@ const loadCollectionsData = async() => {
             let discordsAndBuyers = await Promise.all(buyers.map(async (buyer) => {
                 let discord = await identityMapper.addressToDiscord(buyer);
                 let discordResult = discord ? discord : "Discord Unknown";
-                return {discord: discordResult, address: buyer};
+                return { discord: discordResult, address: buyer };
             }));
-            projectToWL.set(id, {title: `${id}: ${title}`, discordsAndBuyers: discordsAndBuyers});
+            projectToWL.set(id, { title: `${id}: ${title}`, discordsAndBuyers: discordsAndBuyers });
             fakeJSX = `<option value="${id}">${id}: ${title}</option>`;
             idToJSX.set(id, fakeJSX)
             if (id == 0) {
@@ -148,7 +148,7 @@ const loadCollectionsData = async() => {
     $("#listing-select").append(fullJSX);
 }
 
-const loadMyWL = async() => {
+const loadMyWL = async () => {
     if (myWL.length == 0) {
         $("#your-wl-spots").html("No spots purchased!");
     }
@@ -178,7 +178,8 @@ function selectListing(listingKey) {
 
 function updateDownload(listingKey) {
     let listingInfo = projectToWL.get(listingKey);
-    let filename = `Anonymice - ${listingInfo.title} WL.csv`;
+    let filename = `The Shrine - ${listingInfo.title} WL.csv`;
+    let headerRow = "ADDRESS\n";
     let wlArray = [...(listingInfo.discordsAndBuyers)].map(x => {
         if (x.discord) {
             headerRow = "DISCORD,ADDRESS\n";
@@ -200,7 +201,7 @@ function updateDownload(listingKey) {
 
 // General functions
 
-provider.on("network", async(newNetwork, oldNetwork) => {
+provider.on("network", async (newNetwork, oldNetwork) => {
     if (oldNetwork) {
         location.reload();
     }
@@ -208,7 +209,7 @@ provider.on("network", async(newNetwork, oldNetwork) => {
 
 
 // Processing tx returns
-const waitForTransaction = async(tx_) => {
+const waitForTransaction = async (tx_) => {
     startLoading(tx_);
     provider.once(tx_.hash, async (transaction_) => {
         await endLoading(tx_, transaction_.status);
@@ -226,7 +227,7 @@ else {
     pendingTxArray = Array.from(pendingTransactions);
     pendingTransactions = new Set();
 
-    for (let i =0; i < pendingTxArray.length; i++) {
+    for (let i = 0; i < pendingTxArray.length; i++) {
         waitForTransaction(pendingTxArray[i]);
     }
     localStorage.removeItem("ShrineMarketPendingTxs");
@@ -261,24 +262,24 @@ async function endLoading(tx, txStatus) {
     pendingTransactions.delete(tx);
 }
 
-setInterval(async()=>{
+setInterval(async () => {
     await updateCurrentChain();
     await updateInfo();
 }, 5000)
 
 const updateInfo = async () => {
     let userAddress = await getAddress();
-    $("#account-text").text(`${userAddress.substr(0,7)}...`);
+    $("#account-text").text(`${userAddress.substr(0, 7)}...`);
     $("#account").addClass(`connected`);
-    $("#mobile-account-text").text(`${userAddress.substr(0,7)}...`);
+    $("#mobile-account-text").text(`${userAddress.substr(0, 7)}...`);
     $("#mobile-account").addClass(`connected`);
 };
 
-ethereum.on("accountsChanged", async(accounts_)=>{
+ethereum.on("accountsChanged", async (accounts_) => {
     location.reload();
 });
 
-window.onload = async()=>{
+window.onload = async () => {
     await updateCurrentChain();
     await updateInfo();
     let userAddress = await getAddress();
@@ -291,6 +292,6 @@ window.onload = async()=>{
     await loadMyWL();
 };
 
-window.onunload = async()=>{
+window.onunload = async () => {
     cachePendingTransactions();
 }
