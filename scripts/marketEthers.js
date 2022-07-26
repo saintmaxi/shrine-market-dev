@@ -198,32 +198,32 @@ const purchase = async (tokenAddress, id) => {
         }
     }
     catch (error) {
-        if ((error.message).includes("Already purchased")) {
-            await displayErrorMessage(`Error: You already purchased a slot!`);
-        }
-        else if ((error.message).includes("Not started yet")) {
-            await displayErrorMessage(`Error: Listing not started yet!`);
-        }
-        else if ((error.message).includes("This WLVendingItem does not exist!")) {
-            await displayErrorMessage(`Error: Item does not exist!`);
-        }
-        else if ((error.message).includes("No more WL remaining")) {
-            await displayErrorMessage(`Error: No spots left!`);
-        }
-        else if ((error.message).includes("Passed deadline")) {
-            await displayErrorMessage(`Error: Listing expired!`);
-        }
-        else if ((error.message).includes("Not enough tokens")) {
-            await displayErrorMessage(`Error: Not enough $SHRINE!`);
-        }
-        else if ((error.message).includes("transfer amount exceeds allowance")) {
-            await displayErrorMessage(`Error: Market not approved to spend $SHRINE!`);
-        }
-        else if ((error.message).includes("User denied transaction signature")) {
+        if ((error.message).includes("User denied transaction signature")) {
             console.log("Transaction rejected.");
         }
         else if ((error.message).includes("User rejected the transaction")) {
             console.log("Transaction rejected.");
+        }
+        else if ((error.data.message).includes("Already purchased")) {
+            await displayErrorMessage(`Error: You already purchased a slot!`);
+        }
+        else if ((error.data.message).includes("Not started yet")) {
+            await displayErrorMessage(`Error: Listing not started yet!`);
+        }
+        else if ((error.data.message).includes("This WLVendingItem does not exist!")) {
+            await displayErrorMessage(`Error: Item does not exist!`);
+        }
+        else if ((error.data.message).includes("No more WL remaining")) {
+            await displayErrorMessage(`Error: No spots left!`);
+        }
+        else if ((error.data.message).includes("Passed deadline")) {
+            await displayErrorMessage(`Error: Listing expired!`);
+        }
+        else if ((error.data.message).includes("Not enough tokens")) {
+            await displayErrorMessage(`Error: Not enough $SHRINE!`);
+        }
+        else if ((error.data.message).includes("transfer amount exceeds allowance")) {
+            await displayErrorMessage(`Error: Market not approved to spend $SHRINE!`);
         }
         else {
             await displayErrorMessage("An error occurred. See console and window alert for details...")

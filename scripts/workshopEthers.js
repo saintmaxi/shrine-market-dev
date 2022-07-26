@@ -4,7 +4,7 @@
 /*********************************************************************************/
 
 const tokenAddress = "0x29e7509090C27DFc4eC85191e56EA86867760d73";
-const tokenAbi = () => { 
+const tokenAbi = () => {
     return `[{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"subtractedValue","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"addedValue","type":"uint256"}],"name":"increaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"mint","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"sender","type":"address"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"}]`;
 };
 
@@ -41,28 +41,28 @@ if (window.ethereum == undefined) {
     displayErrorMessage('Use a web3 enabled browser and connect to use workshop!');
 }
 
-const provider = new ethers.providers.Web3Provider(window.ethereum,"any");
+const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
 const signer = provider.getSigner();
 const token = new ethers.Contract(tokenAddress, tokenAbi(), signer);
 const market = new ethers.Contract(marketAddress, marketAbi(), signer);
 
-const connect = async()=>{
+const connect = async () => {
     await provider.send("eth_requestAccounts", []);
 };
 
-const getAddress = async()=>{
+const getAddress = async () => {
     return await signer.getAddress()
 };
 
-const formatEther = (balance_)=>{
+const formatEther = (balance_) => {
     return ethers.utils.formatEther(balance_)
 };
 
-const parseEther = (eth_)=>{
+const parseEther = (eth_) => {
     return ethers.utils.parseEther(eth_)
 };
 
-const getChainId = async()=>{
+const getChainId = async () => {
     return await signer.getChainId()
 };
 
@@ -70,14 +70,14 @@ const getChainId = async()=>{
 
 // --- CREATE FUNCTIONS ---
 
-const generateCreate = async() => {
+const generateCreate = async () => {
     let title = $(`#create-input #listing-title`).val();
     let image = $(`#create-input #listing-image`).val();
     let site = ($(`#create-input #listing-site`).val()).includes("https://") ? $(`#create-input #listing-site`).val() : `https://${$(`#create-input #listing-site`).val()}`;
     let description = $(`#create-input #listing-description`).val();
     let amount = Number($(`#create-input #listing-amount`).val());
-    let start = (new Date($(`#create-input #listing-start`).val()).valueOf())/1000;
-    let deadline = (new Date($(`#create-input #listing-deadline`).val()).valueOf())/1000;
+    let start = (new Date($(`#create-input #listing-start`).val()).valueOf()) / 1000;
+    let deadline = (new Date($(`#create-input #listing-deadline`).val()).valueOf()) / 1000;
     let price = Number($(`#create-input #listing-price`).val());
 
     if (start > deadline) {
@@ -93,16 +93,16 @@ const generateCreate = async() => {
         $(`#create-template #ex-description`).html(description.replaceAll("\n", "<br>"));
         $(`#create-template #ex-amount`).html(amount);
         $(`#create-template #ex-remaining`).html(0);
-        $(`#create-template #ex-start`).html(`${(new Date(start*1000)).toLocaleDateString()} ${(new Date(start*1000)).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`);
-        $(`#create-template #ex-deadline`).html(`${(new Date(deadline*1000)).toLocaleDateString()} ${(new Date(deadline*1000)).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`);
+        $(`#create-template #ex-start`).html(`${(new Date(start * 1000)).toLocaleDateString()} ${(new Date(start * 1000)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+        $(`#create-template #ex-deadline`).html(`${(new Date(deadline * 1000)).toLocaleDateString()} ${(new Date(deadline * 1000)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
         $(`#create-template #ex-price`).html(price);
     }
 }
 
-const addListing = async() => {
+const addListing = async () => {
     try {
-        let start = (new Date($(`#create-input #listing-start`).val()).valueOf())/1000;
-        let deadline = (new Date($(`#create-input #listing-deadline`).val()).valueOf())/1000;
+        let start = (new Date($(`#create-input #listing-start`).val()).valueOf()) / 1000;
+        let deadline = (new Date($(`#create-input #listing-deadline`).val()).valueOf()) / 1000;
         if (start > deadline) {
             await displayErrorMessage("Error: Start time must be before deadline!");
         }
@@ -117,21 +117,21 @@ const addListing = async() => {
                 await displayErrorMessage("Missing fields!")
             }
             else {
-                await market.addWLVendingItem(tokenAddress, [title, image, site, description, amount, 0, start, deadline, price]).then( async(tx_) => {
+                await market.addWLVendingItem(tokenAddress, [title, image, site, description, amount, 0, start, deadline, price]).then(async (tx_) => {
                     await waitForTransaction(tx_);
                 });
             }
         }
     }
     catch (error) {
-        if ((error.message).includes("You are not Authorized for this ERC20 Contract!")) {
-            await displayErrorMessage(`You are not authorized to add listings for $SHRINE!`);
-        }
-        else if ((error.message).includes("User denied transaction signature")) {
+        if ((error.message).includes("User denied transaction signature")) {
             console.log("Transaction rejected.");
         }
         else if ((error.message).includes("User rejected the transaction")) {
             console.log("Transaction rejected.");
+        }
+        else if ((error.data.message).includes("You are not Authorized for this ERC20 Contract!")) {
+            await displayErrorMessage(`You are not authorized to add listings for $SHRINE!`);
         }
         else {
             await displayErrorMessage("An error occurred. See console and window alert for details...")
@@ -143,9 +143,9 @@ const addListing = async() => {
 
 // --- MODIFY FUNCTIONS ---
 
-const loadListings = async() => {
+const loadListings = async () => {
     let fakeJSX = "";
-    const numCollections = Number( await market.getWLVendingItemsLength(tokenAddress) );
+    const numCollections = Number(await market.getWLVendingItemsLength(tokenAddress));
     let listings = await market.getWLVendingObjectsPaginated(tokenAddress, 0, numCollections - 1);
     for (let i = 0; i < listings.length; i++) {
         let WLinfo = listings[i];
@@ -160,7 +160,7 @@ const loadListings = async() => {
 
 let currentlySelected;
 
-const selectListing = async(id) => {
+const selectListing = async (id) => {
     currentlySelected = Number(id);
     let currentlySelectedWLinfo = await market.contractToWLVendingItems(tokenAddress, id);
     let title = currentlySelectedWLinfo.title;
@@ -169,8 +169,8 @@ const selectListing = async(id) => {
     let description = currentlySelectedWLinfo.description;
     let amount = currentlySelectedWLinfo.amountAvailable;
     let purchased = currentlySelectedWLinfo.amountPurchased;
-    let start = $("#modify-input #listing-start").val() ? (new Date($(`#modify-input #listing-start`).val()).valueOf())/1000 : currentlySelectedWLinfo.startTime;
-    let deadline = $("#modify-input #listing-deadline").val() ? (new Date($(`#modify-input #listing-deadline`).val()).valueOf())/1000 : currentlySelectedWLinfo.endTime;
+    let start = $("#modify-input #listing-start").val() ? (new Date($(`#modify-input #listing-start`).val()).valueOf()) / 1000 : currentlySelectedWLinfo.startTime;
+    let deadline = $("#modify-input #listing-deadline").val() ? (new Date($(`#modify-input #listing-deadline`).val()).valueOf()) / 1000 : currentlySelectedWLinfo.endTime;
     let price = Number(formatEther(currentlySelectedWLinfo.price));
 
     $("#modify-template #ex-title").html(title.toUpperCase());
@@ -179,25 +179,25 @@ const selectListing = async(id) => {
     $("#modify-template #ex-description").html(description.replaceAll("\n", "<br>"));
     $("#modify-template #ex-amount").html(amount);
     $("#modify-template #ex-remaining").html(purchased);
-    $("#modify-template #ex-start").html(`${(new Date(start*1000)).toLocaleDateString()} ${(new Date(start*1000)).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`);
-    $("#modify-template #ex-deadline").html(`${(new Date(deadline*1000)).toLocaleDateString()} ${(new Date(deadline*1000)).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`);
+    $("#modify-template #ex-start").html(`${(new Date(start * 1000)).toLocaleDateString()} ${(new Date(start * 1000)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+    $("#modify-template #ex-deadline").html(`${(new Date(deadline * 1000)).toLocaleDateString()} ${(new Date(deadline * 1000)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
     $("#modify-template #ex-price").html(price);
 }
 
-const generateModify = async() => {
+const generateModify = async () => {
     if ($("#listing-select").val() != null) {
         let currentlySelectedWLinfo = await market.contractToWLVendingItems(tokenAddress, currentlySelected);
         let title = $("#modify-input #listing-title").val() ? $("#modify-input #listing-title").val() : currentlySelectedWLinfo.title;
-        let image = $("#modify-input #listing-image").val()? $("#modify-input #listing-image").val() : currentlySelectedWLinfo.imageUri;
+        let image = $("#modify-input #listing-image").val() ? $("#modify-input #listing-image").val() : currentlySelectedWLinfo.imageUri;
         let site = $("#modify-input #listing-site").val() ? $("#modify-input #listing-site").val() : currentlySelectedWLinfo.projectUri;
         let siteFormatted = site.includes("https://") ? site : `https://${site}`;
         let description = $("#modify-input #listing-description").val() ? $("#modify-input #listing-description").val() : currentlySelectedWLinfo.description;
         let amount = $("#modify-input #listing-amount").val() ? Number($("#modify-input #listing-amount").val()) : currentlySelectedWLinfo.amountAvailable;
         let purchased = currentlySelectedWLinfo.amountPurchased;
-        let start = $("#modify-input #listing-start").val() ? (new Date($(`#modify-input #listing-start`).val()).valueOf())/1000 : currentlySelectedWLinfo.startTime;
-        let deadline = $("#modify-input #listing-deadline").val() ? (new Date($(`#modify-input #listing-deadline`).val()).valueOf())/1000 : currentlySelectedWLinfo.endTime;
+        let start = $("#modify-input #listing-start").val() ? (new Date($(`#modify-input #listing-start`).val()).valueOf()) / 1000 : currentlySelectedWLinfo.startTime;
+        let deadline = $("#modify-input #listing-deadline").val() ? (new Date($(`#modify-input #listing-deadline`).val()).valueOf()) / 1000 : currentlySelectedWLinfo.endTime;
         let price = $("#modify-input #listing-price").val() ? $("#modify-input #listing-price").val() : Number(formatEther(currentlySelectedWLinfo.price));
-    
+
         if (start > deadline) {
             await displayErrorMessage("Error: Start time must be before deadline!");
         }
@@ -208,8 +208,8 @@ const generateModify = async() => {
             $(`#modify-template #ex-description`).html(description.replaceAll("\n", "<br>"));
             $(`#modify-template #ex-amount`).html(amount);
             $(`#modify-template #ex-remaining`).html(purchased);
-            $(`#modify-template #ex-start`).html(`${(new Date(start*1000)).toLocaleDateString()} ${(new Date(start*1000)).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`);
-            $(`#modify-template #ex-deadline`).html(`${(new Date(deadline*1000)).toLocaleDateString()} ${(new Date(deadline*1000)).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`);
+            $(`#modify-template #ex-start`).html(`${(new Date(start * 1000)).toLocaleDateString()} ${(new Date(start * 1000)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+            $(`#modify-template #ex-deadline`).html(`${(new Date(deadline * 1000)).toLocaleDateString()} ${(new Date(deadline * 1000)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
             $(`#modify-template #ex-price`).html(price);
         }
     }
@@ -218,18 +218,18 @@ const generateModify = async() => {
     }
 }
 
-const modifyListing = async() => {
+const modifyListing = async () => {
     try {
         let currentlySelectedWLinfo = await market.contractToWLVendingItems(tokenAddress, currentlySelected);
         let title = $("#modify-input #listing-title").val() ? $("#modify-input #listing-title").val() : currentlySelectedWLinfo.title;
-        let image = $("#modify-input #listing-image").val()? $("#modify-input #listing-image").val() : currentlySelectedWLinfo.imageUri;
+        let image = $("#modify-input #listing-image").val() ? $("#modify-input #listing-image").val() : currentlySelectedWLinfo.imageUri;
         let site = $("#modify-input #listing-site").val() ? $("#modify-input #listing-site").val() : currentlySelectedWLinfo.projectUri;
         let siteFormatted = site.includes("https://") ? site : `https://${site}`;
         let description = $("#modify-input #listing-description").val() ? $("#modify-input #listing-description").val() : currentlySelectedWLinfo.description;
         let amount = $("#modify-input #listing-amount").val() ? Number($("#modify-input #listing-amount").val()) : currentlySelectedWLinfo.amountAvailable;
         let purchased = currentlySelectedWLinfo.amountPurchased;
-        let start = $("#modify-input #listing-start").val() ? (new Date($(`#modify-input #listing-start`).val()).valueOf())/1000 : currentlySelectedWLinfo.startTime;
-        let deadline = $("#modify-input #listing-deadline").val() ? (new Date($(`#modify-input #listing-deadline`).val()).valueOf())/1000 : currentlySelectedWLinfo.endTime;
+        let start = $("#modify-input #listing-start").val() ? (new Date($(`#modify-input #listing-start`).val()).valueOf()) / 1000 : currentlySelectedWLinfo.startTime;
+        let deadline = $("#modify-input #listing-deadline").val() ? (new Date($(`#modify-input #listing-deadline`).val()).valueOf()) / 1000 : currentlySelectedWLinfo.endTime;
         let price = $("#modify-input #listing-price").val() ? parseEther($("#modify-input #listing-price").val()) : currentlySelectedWLinfo.price;
         if (!(title && image && (site != null) && (description != null) && amount && start && deadline && price && (purchased != null))) {
             await displayErrorMessage("Missing fields!")
@@ -241,20 +241,20 @@ const modifyListing = async() => {
             await displayErrorMessage("Error: Start time must be before deadline!");
         }
         else {
-            await market.modifyWLVendingItem(tokenAddress, currentlySelected, [title, image, siteFormatted, description, amount, purchased, start, deadline, price]).then( async(tx_) => {
+            await market.modifyWLVendingItem(tokenAddress, currentlySelected, [title, image, siteFormatted, description, amount, purchased, start, deadline, price]).then(async (tx_) => {
                 await waitForTransaction(tx_);
             });
         }
     }
     catch (error) {
-        if ((error.message).includes("You are not Authorized for this ERC20 Contract!")) {
-            await displayErrorMessage(`You are not authorized to add listings for $SHRINE!`);
-        }
-        else if ((error.message).includes("User denied transaction signature")) {
+        if ((error.message).includes("User denied transaction signature")) {
             console.log("Transaction rejected.");
         }
         else if ((error.message).includes("User rejected the transaction")) {
             console.log("Transaction rejected.");
+        }
+        else if ((error.data.message).includes("You are not Authorized for this ERC20 Contract!")) {
+            await displayErrorMessage(`You are not authorized to add listings for $SHRINE!`);
         }
         else {
             await displayErrorMessage("An error occurred. See console and window alert for details...")
@@ -264,20 +264,20 @@ const modifyListing = async() => {
     }
 }
 
-const openListingInfo = async() => {
+const openListingInfo = async () => {
     if (!($("#info-popup").length)) {
         let fakeJSX;
         if ($("#modify-button").hasClass("active")) {
             if ($("#listing-select").val() != null) {
                 let currentlySelectedWLinfo = await market.contractToWLVendingItems(tokenAddress, currentlySelected);
                 let title = $("#modify-input #listing-title").val() ? $("#modify-input #listing-title").val() : currentlySelectedWLinfo.title;
-                let image = $("#modify-input #listing-image").val()? $("#modify-input #listing-image").val() : currentlySelectedWLinfo.imageUri;
+                let image = $("#modify-input #listing-image").val() ? $("#modify-input #listing-image").val() : currentlySelectedWLinfo.imageUri;
                 let site = $("#modify-input #listing-site").val() ? $("#modify-input #listing-site").val() : currentlySelectedWLinfo.projectUri;
                 let siteFormatted = site.includes("https://") ? site : `https://${site}`;
                 let description = $("#modify-input #listing-description").val() ? $("#modify-input #listing-description").val() : currentlySelectedWLinfo.description;
                 let amount = $("#modify-input #listing-amount").val() ? Number($("#modify-input #listing-amount").val()) : currentlySelectedWLinfo.amountAvailable;
                 let purchased = currentlySelectedWLinfo.amountPurchased;
-                let price = $("#modify-input #listing-price").val() ? $("#modify-input #listing-price").val() : Number(formatEther(currentlySelectedWLinfo.price));        
+                let price = $("#modify-input #listing-price").val() ? $("#modify-input #listing-price").val() : Number(formatEther(currentlySelectedWLinfo.price));
                 fakeJSX = `<div id="info-popup">
                                     <div id="info-image-wrapper">
                                         <a href="${siteFormatted}" target="_blank"><svg id="info-link" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path fill="black" d="M256 64C256 46.33 270.3 32 288 32H415.1C415.1 32 415.1 32 415.1 32C420.3 32 424.5 32.86 428.2 34.43C431.1 35.98 435.5 38.27 438.6 41.3C438.6 41.35 438.6 41.4 438.7 41.44C444.9 47.66 447.1 55.78 448 63.9C448 63.94 448 63.97 448 64V192C448 209.7 433.7 224 416 224C398.3 224 384 209.7 384 192V141.3L214.6 310.6C202.1 323.1 181.9 323.1 169.4 310.6C156.9 298.1 156.9 277.9 169.4 265.4L338.7 96H288C270.3 96 256 81.67 256 64V64zM0 128C0 92.65 28.65 64 64 64H160C177.7 64 192 78.33 192 96C192 113.7 177.7 128 160 128H64V416H352V320C352 302.3 366.3 288 384 288C401.7 288 416 302.3 416 320V416C416 451.3 387.3 480 352 480H64C28.65 480 0 451.3 0 416V128z"/></svg></a>
@@ -338,7 +338,7 @@ const openListingInfo = async() => {
 
 // General functions
 
-provider.on("network", async(newNetwork, oldNetwork) => {
+provider.on("network", async (newNetwork, oldNetwork) => {
     if (oldNetwork) {
         location.reload();
     }
@@ -346,7 +346,7 @@ provider.on("network", async(newNetwork, oldNetwork) => {
 
 
 // Processing tx returns
-const waitForTransaction = async(tx_) => {
+const waitForTransaction = async (tx_) => {
     startLoading(tx_);
     provider.once(tx_.hash, async (transaction_) => {
         await endLoading(tx_, transaction_.status);
@@ -364,7 +364,7 @@ else {
     pendingTxArray = Array.from(pendingTransactions);
     pendingTransactions = new Set();
 
-    for (let i =0; i < pendingTxArray.length; i++) {
+    for (let i = 0; i < pendingTxArray.length; i++) {
         waitForTransaction(pendingTxArray[i]);
     }
     localStorage.removeItem("ShrineMarketPendingTxs");
@@ -399,15 +399,15 @@ async function endLoading(tx, txStatus) {
     pendingTransactions.delete(tx);
 }
 
-setInterval(async()=>{
+setInterval(async () => {
     await updateInfo();
     await updateCurrentChain();
 }, 5000);
 
-setInterval(async()=>{
+setInterval(async () => {
     const el1 = $("#create-template .start-time");
     const el2 = $("#create-template .end-time");
-    const el3= $("#modify-template .start-time");
+    const el3 = $("#modify-template .start-time");
     const el4 = $("#modify-template .end-time");
     el1.toggleClass('hidden');
     el2.toggleClass('hidden');
@@ -415,7 +415,7 @@ setInterval(async()=>{
     el4.toggleClass('hidden');
 }, 3000);
 
-const updateCurrentChain = async() => {
+const updateCurrentChain = async () => {
     if ((await getChainId()) !== correctChain) {
         displayErrorMessage(`Error: Wrong Network!<br><br><button class="button" onclick="switchToPolygon()">SWITCH TO POLYGON.</button>`, false);
     }
@@ -425,7 +425,7 @@ const updateCurrentChain = async() => {
     }
 }
 
-const switchToPolygon = async() => {
+const switchToPolygon = async () => {
     window.ethereum.request({
         method: "wallet_addEthereumChain",
         params: [{
@@ -444,17 +444,17 @@ const switchToPolygon = async() => {
 
 const updateInfo = async () => {
     let userAddress = await getAddress();
-    $("#account-text").text(`${userAddress.substr(0,7)}...`);
+    $("#account-text").text(`${userAddress.substr(0, 7)}...`);
     $("#account").addClass(`connected`);
-    $("#mobile-account-text").text(`${userAddress.substr(0,7)}...`);
+    $("#mobile-account-text").text(`${userAddress.substr(0, 7)}...`);
     $("#mobile-account").addClass(`connected`);
 };
 
-ethereum.on("accountsChanged", async(accounts_)=>{
+ethereum.on("accountsChanged", async (accounts_) => {
     location.reload();
 });
 
-window.onload = async()=>{
+window.onload = async () => {
     await updateInfo();
     await updateCurrentChain();
     await loadListings();
@@ -465,6 +465,6 @@ window.onload = async()=>{
     }
 };
 
-window.onunload = async()=>{
+window.onunload = async () => {
     cachePendingTransactions();
 }
